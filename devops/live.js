@@ -2,7 +2,7 @@ const shell = require('shelljs')
 require('dotenv').config()
 
 // Start Config
-const PM2_NAME = 'litekart-grocery'
+const PM2_NAME = 'lgro-www'
 const REMOTE_DIR = '/var/www/litekart/grocery/www'
 const REMOTE_HOST = '143.110.244.136'
 const REMOTE_USER = 'root'
