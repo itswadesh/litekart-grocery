@@ -1,0 +1,13 @@
+query size($id: ID) {
+  size(id: $id) {
+    id
+    name
+    slug
+    info
+    img
+    featured
+    active
+    createdAt
+    updatedAt
+  }
+}

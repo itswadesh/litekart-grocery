@@ -1,0 +1,153 @@
+<template>
+  <div
+    style="background: #dfdfdf"
+    class="w-full rounded-md shadow-md hover:shadow-lg focus:outline-none full-height rounded-te-3xl"
+  >
+    <div class="flex flex-row-reverse w-full focus:outline-none">
+      <div
+        v-if="product"
+        class="w-full mx-auto overflow-hidden focus:outline-none"
+      >
+        <div
+          class="flex flex-row-reverse justify-between px-2 pt-2 mx-auto my-auto md:p-2 flex-start"
+        >
+          <span class="text-white">.</span>
+          <nuxt-link
+            :to="`/search/${product.brand && product.brand.name}`"
+            class="absolute"
+          >
+            <div
+              class="flex items-center bg-white border cursor-pointer border-primary-500 trans"
+            >
+              <svg
+                class="absolute flex items-center justify-center w-4 h-4 fill-current ms-1 text-primary-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                />
+                <path
+                  d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"
+                />
+              </svg>
+              <div class="my-auto text-xs font-medium ps-6 text-primary-500">
+                View Similar
+              </div>
+            </div>
+          </nuxt-link>
+        </div>
+
+        <div class="image_container">
+          <nuxt-link :to="localePath(`/${product.slug}?id=${pid}`)">
+            <img
+              v-lazy="product.img"
+              alt=""
+              class="object-contain w-full h-48 overflow-hidden sm:pb-2 rounded-te-3xl"
+            />
+          </nuxt-link>
+        </div>
+        <!-- name_brand_addtocart -->
+        <div
+          class="relative pt-1 mt-1 overflow-hidden bg-white sm:pt-3 sm:mt-3 md:pb-0"
+        >
+          <div class="">
+            <!-- name_price_container -->
+            <nuxt-link :to="localePath(`/${product.slug}?id=${pid}`)">
+              <div class="p-2 mx-auto text-sm">
+                <div
+                  class="text-base font-medium leading-3 capitalize text-start text-primary-500"
+                >
+                  {{ (product.brand && product.brand.name) || '-' }}
+                </div>
+                <div
+                  class="mt-2 overflow-hidden text-base font-light text-gray-400 truncate text-start"
+                >
+                  {{ product.name }}
+                </div>
+                <div class="flex flex-row">
+                  <div class="text-base font-medium text-gray-900">
+                    {{ product.price | currency(settings.currency_symbol) }}
+                  </div>
+                  <div v-if="product.price < product.mrp" class="flex flex-row">
+                    <strike
+                      class="mx-3 my-auto text-sm font-light leading-7 text-gray-400"
+                    >
+                      {{ product.mrp | currency(settings.currency_symbol) }}
+                    </strike>
+                    <div
+                      class="my-auto text-xs font-medium text-secondary-200"
+                      v-if="product.price < product.mrp"
+                    >
+                      ({{
+                        Math.floor(100 - (product.price * 100) / product.mrp)
+                      }}% off)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
+export default {
+  components: {},
+  props: {
+    product: { type: Object },
+    pid: { type: String }, // Required in case of elastic search id not available inside product
+  },
+  computed: {
+    ...mapGetters({
+      cart: 'cart/cart',
+      getItemQty: 'cart/getItemQty',
+      settings: 'settings',
+    }),
+  },
+}
+</script>
+
+<style scoped>
+.add {
+  width: 57px;
+  height: 21px;
+}
+.trans {
+  width: 26px;
+  height: 26px;
+  transition: width 0.2s;
+  overflow: hidden;
+  font-size: 10px;
+  /* padding: 2px; */
+  border-radius: 20px;
+}
+.trans:hover {
+  width: 102px;
+}
+@media only screen and (min-width: 1024px) {
+  .cart {
+    overflow: hidden;
+  }
+  .totalheight {
+    transition: height 0.3s;
+    overflow: hidden;
+    height: 390px;
+  }
+  .totalheight:hover {
+    height: 350px;
+  }
+}
+.similar {
+  width: 26px;
+  height: 26px;
+}
+</style>

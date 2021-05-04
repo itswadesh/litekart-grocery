@@ -1,0 +1,22 @@
+[[redirects]]
+  from = "/graphql/*"
+  to = "https://gapi.litekart.in/graphql/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/images/*"
+  to = "https://gapi.litekart.in/images/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://gapi.litekart.in/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/auth/*"
+  to = "https://gapi.litekart.in/auth/:splat"
+  status = 200
+
+[build]
+  ignore = "./exit-zero.sh"

@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  www:
+    build: ./
+    image: itswadesh/litekart-grocery-www
+    container_name: litekart-grocery-www
+    restart: unless-stopped
+    ports:
+      - '4400:4400'
+    environment:
+      - NODE_ENV=production
+      - PORT=4400
+      - HTTP_ENDPOINT=https://gapi.litekart.in

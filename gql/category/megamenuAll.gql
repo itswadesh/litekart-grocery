@@ -1,0 +1,122 @@
+query megamenuAll($id: ID, $search: String, $sort: String, $featured: Boolean) {
+  megamenuAll(id: $id, search: $search, sort: $sort, featured: $featured) {
+    id
+    name
+    slug
+    img
+    featured
+    categoryId
+    parent {
+      id
+      categoryId
+    }
+    children {
+      id
+      name
+      slug
+      img
+      featured
+      categoryId
+      parent {
+        id
+        categoryId
+      }
+      children {
+        id
+        name
+        slug
+        img
+        featured
+        categoryId
+        parent {
+          id
+          categoryId
+        }
+        children {
+          id
+          name
+          slug
+          img
+          featured
+          categoryId
+          parent {
+            id
+            categoryId
+          }
+          children {
+            id
+            name
+            slug
+            img
+            featured
+            categoryId
+            parent {
+              id
+              categoryId
+            }
+            children {
+              id
+              name
+              slug
+              img
+              featured
+              categoryId
+              parent {
+                id
+                categoryId
+              }
+              children {
+                id
+                name
+                slug
+                img
+                featured
+                categoryId
+                parent {
+                  id
+                  categoryId
+                }
+                children {
+                  id
+                  name
+                  slug
+                  img
+                  featured
+                  categoryId
+                  parent {
+                    id
+                    categoryId
+                  }
+                  children {
+                    id
+                    name
+                    slug
+                    img
+                    featured
+                    categoryId
+                    parent {
+                      id
+                      categoryId
+                    }
+                    children {
+                      id
+                      name
+                      slug
+                      img
+                      featured
+                      categoryId
+                      parent {
+                        id
+                        categoryId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
