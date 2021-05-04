@@ -1,7 +1,0 @@
-query reviewSummary($product: ID!) {
-  reviewSummary(product: $product) {
-    avg
-    count
-    total
-  }
-}
