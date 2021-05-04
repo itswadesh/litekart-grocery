@@ -59,6 +59,7 @@ export default {
         arrows: false,
         dots: false,
         autoplay: false,
+        slidesToShow: 9,
         responsive: [
           {
             breakpoint: 1920,

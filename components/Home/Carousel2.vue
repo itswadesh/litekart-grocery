@@ -5,7 +5,7 @@
       v-bind="carouselSettings"
       v-if="products && products.length"
     >
-      <div v-for="p in products" :key="p.id" class="flex items-stretch">
+      <div v-for="p in products" :key="p.id" class="flex">
         <Product :p="p" class="w-full" />
       </div>
     </VueSlickCarousel>
@@ -23,13 +23,8 @@ export default {
         arrows: false,
         dots: false,
         autoplay: false,
+        slidesToShow: 10,
         responsive: [
-          {
-            breakpoint: 1900,
-            settings: {
-              slidesToShow: 10,
-            },
-          },
           {
             breakpoint: 1024,
             settings: {
