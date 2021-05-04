@@ -11,6 +11,7 @@ import {
   PORT,
   GOOGLE_ANALYTICS_ID,
 } from './shared/config/index'
+console.log('WWW_URL............', WWW_URL)
 // const whitelist = ['preview-img-item']
 const whitelistPatterns = [/(slick-+|swal2-)/]
 export default {
@@ -94,6 +95,7 @@ export default {
   proxy: {
     '/graphql': HTTP_ENDPOINT,
     '/api': HTTP_ENDPOINT,
+    '/auth': HTTP_ENDPOINT,
   },
   build: {
     babel: {
