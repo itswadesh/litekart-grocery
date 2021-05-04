@@ -1,14 +1,14 @@
 # Litekart
 
 - Clone including submodules
-  `git clone --recurse-submodules git@github.com:itswadesh/litekart-grocery-www.git`
+  `git clone --recurse-submodules git@github.com:itswadesh/litekart-grocery.git`
 
 - Update submodules after clone
   `git submodule update --init --recursive`
 
 ## Docker
 
-- docker pull itswadesh/litekart-grocery-www
+- docker pull itswadesh/litekart-grocery
 - /usr/local/bin/docker-compose up
 
 ## Login to docker shell

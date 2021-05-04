@@ -3,8 +3,8 @@ require('dotenv').config()
 
 // Start Config
 const PM2_NAME = 'litekart-grocery'
-const REMOTE_DIR = '/var/www/litekart/grocery'
-const REMOTE_HOST = '139.59.42.129'
+const REMOTE_DIR = '/var/www/litekart/grocery/www'
+const REMOTE_HOST = '143.110.244.136'
 const REMOTE_USER = 'root'
 const PRIVATE_KEY = process.env.LIVE_KEY
 const FILE_NAMES = '.nuxt static nuxt.config.js shared config lang package.json'
