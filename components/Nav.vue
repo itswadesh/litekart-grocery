@@ -43,7 +43,7 @@
             class="relative flex flex-col items-center mx-3"
             to="/cart"
           >
-            <ShoppingCartIcon class="h-5 ml-1" />
+            <ShoppingCartIcon class="h-5" />
             <div class="flex text-xs font-bold">
               Cart
               <div
