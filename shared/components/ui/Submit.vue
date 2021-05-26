@@ -9,10 +9,11 @@
         :class="{ loading: loading }"
         alt
       />-->
-    <div v-if="loading">
+    <!-- <div v-if="loading">
       <img src="/loading.svg" alt="" class="justify-center h-6" />
-    </div>
-    <slot v-else />
+    </div> -->
+    <!-- v-else -->
+    <slot />
   </button>
 </template>
 

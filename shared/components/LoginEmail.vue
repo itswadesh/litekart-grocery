@@ -4,9 +4,9 @@
   >
     <div class="w-full max-w-md p-5 bg-white rounded-lg shadow">
       <div class="max-w-sm mx-auto">
-        <h1 class="text-xl font-bold text-secondary-500">
+        <span class="text-xl font-bold text-secondary">
           SIGN IN
-        </h1>
+        </span>
 
         <SocialLogin class="my-5" />
         <div class="flex items-center pt-3">
