@@ -1,40 +1,47 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-screen bg-gray-200">
-    <div class="w-full px-4 lg:w-1/3">
-      <div class="bg-white rounded shadow">
-        <div class="text-white text-secondary">
-          <h1 class="p-3 mb-2 text-xl text-center">
-            <span class="font-extrabold">SIGN IN</span> WITH
-          </h1>
+  <div
+    class="flex flex-col items-center h-screen p-4 text-center text-gray-500 bg-gray-200 md:justify-center"
+  >
+    <div class="w-full max-w-md p-5 bg-white rounded-lg shadow">
+      <div class="max-w-sm mx-auto">
+        <h1 class="text-xl font-bold text-secondary-500">
+          SIGN IN
+        </h1>
+
+        <SocialLogin class="my-5" />
+        <div class="flex items-center pt-3">
+          <hr class="w-full" />
+          <span class="mx-5 text-sm font-semibold">or</span>
+          <hr class="w-full" />
         </div>
-        <SocialLogin />
-        <hr />
-        <form
-          novalidate
-          autocomplete="off"
-          @submit.stop.prevent="submit()"
-          class="my-8 center"
-        >
-          <h3 class="text-center text-gray-500">or signin with credentials</h3>
-          <div class="p-6">
-            <Textbox v-model="uid" label="Email" class="mb-4 bg-gray-200" />
+        <form novalidate autocomplete="off" @submit.stop.prevent="submit()">
+          <h3 class="mt-5">or signin with credentials</h3>
+          <div class="my-5">
+            <Textbox v-model="uid" label="Email" class="" />
             <Textbox
               v-model="password"
               name="password"
               label="Password"
               ref="password"
               type="password"
-              class="w-full bg-gray-200"
+              class="w-full mt-5"
             />
             <div class="flex items-center justify-between text-xs">
               <div />
-              <nuxt-link :to="`/account/forgot-password?email=${uid}`" class
+              <nuxt-link
+                :to="`/account/forgot-password?email=${uid}`"
+                class="mt-2"
                 >Forgot Password?</nuxt-link
               >
             </div>
-            <div class="flex items-center justify-between mt-6">
+            <div class="flex items-center justify-between mt-5 space-x-4">
               <Submit class="w-1/2">Login</Submit>
-              <nuxt-link to="/signup">Register now</nuxt-link>
+              <nuxt-link
+                to="/signup"
+                class="w-1/2 py-2 font-semibold transition duration-300 transform rounded-md hover:bg-gray-200 hover:shadow-md active:scale-95"
+              >
+                Register now
+              </nuxt-link>
             </div>
           </div>
         </form>
@@ -44,19 +51,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { Textbox, Submit } from './ui'
-import SocialLogin from './SocialLogin'
+import { mapActions } from "vuex";
+import { Textbox, Submit } from "./ui";
+import SocialLogin from "./SocialLogin";
 export default {
   data() {
     return {
       loading: false,
-      fadeIn: '',
-      disable: 'disable',
+      fadeIn: "",
+      disable: "disable",
       msg: null,
-      firstName: '',
-      lastName: '',
-    }
+      firstName: "",
+      lastName: "",
+    };
   },
   props: {
     uid: { type: String },
@@ -65,24 +72,24 @@ export default {
   components: { Textbox, SocialLogin, Submit },
   computed: {
     isEmail() {
-      if (this.uid.includes('@')) return true
-      else return false
+      if (this.uid.includes("@")) return true;
+      else return false;
     },
   },
   methods: {
     ...mapActions({
-      login: 'auth/login',
+      login: "auth/login",
     }),
     async submit() {
-      if (!this.uid || this.uid == '') {
-        this.$store.commit('setErr', 'Please enter your email')
-        return
+      if (!this.uid || this.uid == "") {
+        this.$store.commit("setErr", "Please enter your email");
+        return;
       }
       if (!this.isEmail) {
-        this.$store.commit('setErr', 'Entered email is not valid')
-        return
+        this.$store.commit("setErr", "Entered email is not valid");
+        return;
       }
-      this.emailLogin()
+      this.emailLogin();
     },
     async emailLogin() {
       try {
@@ -90,47 +97,47 @@ export default {
         const data = await this.login({
           email: this.uid,
           password: this.password,
-        })
-        const redirect = this.$route.hash.substr(1) || '/'
-        this.$router.push(redirect)
+        });
+        const redirect = this.$route.hash.substr(1) || "/";
+        this.$router.push(redirect);
       } catch (e) {
-        let msg
+        let msg;
         if (e.networkError) {
           if (!e.networkError.result) {
             if (
               e.networkError.message ==
-              'Unexpected token E in JSON at position 0'
+              "Unexpected token E in JSON at position 0"
             )
-              msg = 'Unable to connect to server...'
-            else msg = 'Server is down.'
+              msg = "Unable to connect to server...";
+            else msg = "Server is down.";
           } else if (e.networkError.result && e.networkError.result.errors) {
             e.networkError.result.errors.map(({ message }, i) => {
-              msg = message
-            })
+              msg = message;
+            });
           } else {
-            msg = e.networkError.toString()
+            msg = e.networkError.toString();
           }
         } else if (e.graphQLErrors) {
           if (e.graphQLErrors.length < 1) {
             // state.errors.push('Server is down.')
-            msg = message
+            msg = message;
           } else {
             e.graphQLErrors.map(({ message }, i) => {
-              msg = message
-            })
+              msg = message;
+            });
           }
           // console.log(state.errors)
         } else {
-          msg = e
+          msg = e;
         }
-        if (msg == 'You are already signed in.') {
-          this.$router.push('/')
+        if (msg == "You are already signed in.") {
+          this.$router.push("/");
         } else {
         }
       }
     },
   },
-}
+};
 </script>
 <style scoped>
 .border-t {

@@ -1,40 +1,36 @@
 <template>
-  <div class="bg-gray-200 h-screen flex flex-col items-center justify-center">
-    <div class="lg:w-1/3 w-full px-4">
-      <div class="bg-white rounded shadow">
-        <div class="text-secondary text-white">
-          <h1 class="text-xl mb-2 text-center p-3">
-            <span class="font-extrabold">SIGN UP</span> WITH
-          </h1>
+  <div
+    class="flex flex-col items-center h-screen p-4 text-center text-gray-500 bg-gray-200 md:justify-center"
+  >
+    <div class="w-full max-w-md p-5 bg-white rounded-lg shadow">
+      <div class="max-w-sm mx-auto">
+        <h1 class="text-xl font-bold text-secondary-500">SIGN IN</h1>
+        <SocialLogin class="my-5" />
+        <div class="flex items-center pt-3">
+          <hr class="w-full" />
+          <span class="mx-5 text-sm font-semibold">or</span>
+          <hr class="w-full" />
         </div>
-        <!-- How to attach referrer -->
-        <SocialLogin />
-        <hr />
-        <form
-          novalidate
-          autocomplete="off"
-          @submit.stop.prevent="submit()"
-          class="center my-8"
-        >
-          <h3 class="text-center text-gray-500">or signin with credentials</h3>
-          <div class="p-6">
-            <Textbox v-model="uid" label="Email" class="bg-gray-200 mb-4" />
+        <form novalidate autocomplete="off" @submit.stop.prevent="submit()">
+          <h3 class="mt-5">or signin with credentials</h3>
+          <div class="my-5">
+            <Textbox v-model="uid" label="Email" class="mb-4 bg-gray-200" />
             <Textbox
               v-model="password"
               name="password"
               label="Password"
               ref="password"
               type="password"
-              class="w-full bg-gray-200 mb-4"
+              class="w-full mb-4 bg-gray-200"
             />
             <div class="text-right">
               <span class="text-xs"></span>
             </div>
-            <div class="flex">
+            <div class="flex justify-between space-x-4">
               <Textbox
                 v-model="firstName"
                 label="Fisrt Name"
-                class="w-1/2 bg-gray-200 mr-2"
+                class="w-1/2 bg-gray-200"
               />
               <Textbox
                 v-model="lastName"
@@ -42,9 +38,14 @@
                 class="w-1/2 bg-gray-200"
               />
             </div>
-            <div class="flex items-center justify-between mt-6">
-              <nuxt-link class="text-xs mr-8" to="/login">Login</nuxt-link>
-              <Submit>Sign Up</Submit>
+            <div class="flex items-center justify-between mt-5 space-x-4">
+              <nuxt-link
+                to="/login"
+                class="w-1/2 py-2 font-semibold transition duration-300 transform rounded-md hover:bg-gray-200 hover:shadow-md active:scale-95"
+              >
+                Login
+              </nuxt-link>
+              <Submit class="w-1/2">Sign Up</Submit>
             </div>
           </div>
         </form>
@@ -54,46 +55,46 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { Textbox, Submit } from '~/shared/components/ui'
-import { SocialLogin } from '~/shared/components'
+import { mapActions, mapGetters } from "vuex";
+import { Textbox, Submit } from "~/shared/components/ui";
+import { SocialLogin } from "~/shared/components";
 export default {
-  middleware: ['isGuest'],
+  middleware: ["isGuest"],
   data() {
     return {
       loading: false,
-      fadeIn: '',
-      disable: 'disable',
+      fadeIn: "",
+      disable: "disable",
       msg: null,
-      uid: '',
-      password: '',
-      passwordConfirmation: '',
-      firstName: '',
-      lastName: '',
-    }
+      uid: "",
+      password: "",
+      passwordConfirmation: "",
+      firstName: "",
+      lastName: "",
+    };
   },
   components: { Textbox, SocialLogin, Submit },
   computed: {
-    ...mapGetters({ settings: 'settings' }),
+    ...mapGetters({ settings: "settings" }),
     isEmail() {
-      if (this.uid.includes('@')) return true
-      else return false
+      if (this.uid.includes("@")) return true;
+      else return false;
     },
   },
   methods: {
     ...mapActions({
-      register: 'auth/register',
+      register: "auth/register",
     }),
     async submit() {
-      if (!this.uid || this.uid == '') {
-        this.$store.commit('setErr', 'Please enter your email')
-        return
+      if (!this.uid || this.uid == "") {
+        this.$store.commit("setErr", "Please enter your email");
+        return;
       }
       if (!this.isEmail) {
-        this.$store.commit('setErr', 'Entered email is not valid')
-        return
+        this.$store.commit("setErr", "Entered email is not valid");
+        return;
       }
-      this.emailSignup()
+      this.emailSignup();
     },
     async emailSignup() {
       try {
@@ -104,49 +105,49 @@ export default {
           firstName: this.firstName,
           lastName: this.lastName,
           referrer: this.$route.query.referrer,
-        })
-        this.$router.push('/')
+        });
+        this.$router.push("/");
       } catch (e) {
-        this.$store.commit('setErr', e)
+        this.$store.commit("setErr", e);
       }
     },
   },
-  layout: 'none',
+  layout: "none",
   head() {
     return {
-      title: 'Login to ' + this.settings.websiteName,
+      title: "Login to " + this.settings.websiteName,
       meta: [
         {
-          hid: 'description',
-          name: 'description',
-          content: 'Login to ' + this.settings.websiteName,
+          hid: "description",
+          name: "description",
+          content: "Login to " + this.settings.websiteName,
         },
         {
-          hid: 'og:description',
-          name: 'Description',
-          property: 'og:description',
-          content: 'Login to ' + this.settings.websiteName,
+          hid: "og:description",
+          name: "Description",
+          property: "og:description",
+          content: "Login to " + this.settings.websiteName,
         },
 
         {
-          hid: 'og:title',
-          name: 'og:title',
-          property: 'og:title',
-          content: 'Checkout with the products in your cart',
+          hid: "og:title",
+          name: "og:title",
+          property: "og:title",
+          content: "Checkout with the products in your cart",
         },
         // Twitter
         {
-          name: 'twitter:title',
-          content: 'Checkout with the products in your cart',
+          name: "twitter:title",
+          content: "Checkout with the products in your cart",
         },
         {
-          name: 'twitter:description',
-          content: 'Login to ' + this.settings.websiteName,
+          name: "twitter:description",
+          content: "Login to " + this.settings.websiteName,
         },
       ],
-    }
+    };
   },
-}
+};
 </script>
 <style scoped>
 .border-t {

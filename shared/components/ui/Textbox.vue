@@ -1,9 +1,9 @@
 <template>
   <div class="group">
     <div class="floating-form">
-      <div class="floating-input relative">
+      <div class="relative floating-input">
         <input
-          class="floating-input pt-6 pl-2 p-3 h-12 bg-gray-100 w-full rounded hover:cursor-pointer focus:outline-none shadow"
+          class="w-full h-12 p-3 pt-6 pl-2 border-gray-300 rounded shadow cursor-pointer bg-gray-50 floating-input"
           :class="cls"
           placeholder=" "
           v-bind="$attrs"
@@ -14,7 +14,7 @@
           :aria-label="label"
         />
         <span class="highlight"></span>
-        <label class="text-gray-700 absolute">{{ label }}</label>
+        <label class="absolute text-gray-700">{{ label }}</label>
       </div>
     </div>
   </div>
@@ -24,11 +24,11 @@
 export default {
   props: {
     label: { type: String },
-    type: { type: String, default: 'text' },
+    type: { type: String, default: "text" },
     value: { type: [Number, String] },
     cls: { type: String },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -37,8 +37,9 @@ export default {
 }
 .floating-input:focus ~ label,
 .floating-input:not(:placeholder-shown) ~ label {
-  top: -2px;
+  top: 2px;
   color: #02baf2;
+  font-size: 0.8rem;
 }
 
 label {
