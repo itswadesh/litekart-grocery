@@ -6,7 +6,10 @@
         CHOOSE DELIVERY ADDRESS
       </div>
       <div class="m-2 lg:flex">
-        <ApolloQuery :query="require('~/gql/address/myAddresses.gql')">
+        <ApolloQuery
+          :query="require('~/gql/address/myAddresses.gql')"
+          :variables="{ store: $store.state.store && $store.state.store.id }"
+        >
           <template v-slot="{ result: { error, data }, isLoading }">
             <div v-if="isLoading">Loading........</div>
             <ErrComponent v-else-if="error" :error="error" />

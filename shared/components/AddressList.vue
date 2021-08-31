@@ -10,7 +10,10 @@
       >
         <PlusIcon class="w-10 mr-1" />ADD NEW ADDRESS
       </nuxt-link>
-      <ApolloQuery :query="require('~/gql/address/myAddresses.gql')">
+      <ApolloQuery
+        :query="require('~/gql/address/myAddresses.gql')"
+        :variables="{ store: $store.state.store && $store.state.store.id }"
+      >
         <template v-slot="{ result: { error, data }, isLoading }">
           <div v-if="isLoading">Loading...</div>
           <ErrComponent v-else-if="error" :error="error" />

@@ -3,7 +3,10 @@
     <div class="container min-h-screen mx-auto">
       <h1 class="mt-4 text-3xl text-center">Offers</h1>
       <div class="w-full">
-        <ApolloQuery :query="require('~/gql/coupon/coupons.gql')">
+        <ApolloQuery
+          :query="require('~/gql/coupon/coupons.gql')"
+          :variables="{ store: $store.state.store && $store.state.store.id }"
+        >
           <template v-slot="{ result: { error, data }, isLoading }">
             <div v-if="isLoading">
               <div>Loading...</div>

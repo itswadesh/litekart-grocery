@@ -1,20 +1,18 @@
 <template>
-  <ApolloQuery id="nav" :query="require('~/gql/category/categories.gql')">
-    <template v-slot="{ result: { error, data }, isLoading }">
-      <div v-if="isLoading">Loading...</div>
-      <ErrComponent v-else-if="error" />
-      <div
-        :class="cls"
-        style
-        class="w-full pl-1 mb-2 text-gray-700 bg-gray-100 border-t shadow-lg"
-        v-else-if="megamenu"
-      >
-        <VueSlickCarousel v-bind="carouselSettings">
-          <div v-for="(i, ix) in megamenu" :key="ix">
-            <img class="object-cover w-full h-48 mx-4" v-lazy="i.img" alt />
-          </div>
-        </VueSlickCarousel>
-        <!-- <Carousel
+  <div
+    :class="cls"
+    style
+    class="w-full pl-1 mb-2 text-gray-700 bg-gray-100 border-t shadow-lg"
+  >
+    <VueSlickCarousel
+      v-if="megamenu && megamenu.length"
+      v-bind="carouselSettings"
+    >
+      <div v-for="(i, ix) in megamenu" :key="ix">
+        <img class="object-cover w-full h-48 mx-4" v-lazy="i.img" alt />
+      </div>
+    </VueSlickCarousel>
+    <!-- <Carousel
           :perPageCustom="[
             [320, 4],
             [768, 6],
@@ -36,15 +34,13 @@
             </nuxt-link>
           </slide>
         </Carousel> -->
-      </div>
-    </template>
-  </ApolloQuery>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 // import { Carousel, Slide } from 'vue-carousel'
-import categories from '~/gql/category/categories.gql'
+// import categories from '~/gql/category/categories.gql'
 import { OnelineSkeleton } from '~/shared/components/ui'
 export default {
   components: {
@@ -102,11 +98,7 @@ export default {
     // }
     try {
       this.$store.commit('clearErr', false)
-      this.categories = (
-        await this.$apollo.query({
-          query: categories,
-        })
-      ).data.categories
+      this.categories = await this.$get('category/categories')
     } catch (e) {
       this.$store.commit('setErr', e)
     } finally {

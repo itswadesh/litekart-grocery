@@ -18,7 +18,10 @@
     </div>
     <ApolloQuery
       :query="require('~/gql/review/productReviews.gql')"
-      :variables="{ product: product.id }"
+      :variables="{
+        product: product.id,
+        store: $store.state.store && $store.state.store.id,
+      }"
     >
       <template v-slot="{ result: { error, data }, isLoading }">
         <div v-if="isLoading">

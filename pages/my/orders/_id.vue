@@ -3,7 +3,10 @@
     <HeadingFlat>Order Details</HeadingFlat>
     <ApolloQuery
       :query="require('~/gql/order/order.gql')"
-      :variables="{ id: $route.params.id }"
+      :variables="{
+        id: $route.params.id,
+        store: $store.state.store && $store.state.store.id,
+      }"
       :update="(data) => data.order"
       fetchPolicy="no-cache"
     >

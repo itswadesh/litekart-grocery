@@ -2,7 +2,12 @@
   <div class="w-full h-64">
     <ApolloQuery
       :query="require('~/gql/banner/banners.gql')"
-      :variables="{ city, type: 'slider', active: true }"
+      :variables="{
+        city,
+        type: 'slider',
+        active: true,
+        store: $store.state.store && $store.state.store.id,
+      }"
     >
       <template v-slot="{ result: { error, data }, isLoading }">
         <div v-if="isLoading">Loading...</div>

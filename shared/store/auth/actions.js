@@ -10,7 +10,7 @@ import EMAIL_PASSWORD from '~/gql/user/emailPassword.gql'
 import RESET_PASSWORD from '~/gql/user/resetPassword.gql'
 
 export default {
-  async fetch({ commit, state, getters }) {
+  async fetch({ commit, state, getters }, slug) {
     try {
       commit('clearErr', null, { root: true })
       commit('busy', true, { root: true })
@@ -78,7 +78,7 @@ export default {
       ).data.signOut
       if (logout) {
         commit('clearUser')
-        this.app.router.push('/')
+        this.$router.push(`/`)
       } else commit('setErr', 'Logout error', { root: true })
     } catch (e) {
     } finally {
@@ -86,135 +86,16 @@ export default {
     }
   },
   async register({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      const data = (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: REGISTER,
-          variables,
-        })
-      ).data.register
+    commit('clearErr', null, { root: true })
+    const data = (
+      await this.app.apolloProvider.defaultClient.mutate({
+        mutation: REGISTER,
+        variables,
+      })
+    ).data.register
 
-      // console.log(data, 'registerrrrr')
-      if (data) {
-        commit('setUser', {
-          phone: data.phone,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          avatar: data.avatar,
-          gender: data.gender,
-          state: data.state,
-          city: data.city,
-          zip: data.zip,
-          phone: data.phone,
-          role: data.role,
-          provider: data.provider,
-          verified: data.verified,
-        })
-        commit('info', 'Registered successfully.', { root: true })
-        return data
-      }
-    } catch (err) {
-      throw err
-    } finally {
-      commit('busy', false, { root: true })
-    }
-  },
-  async login({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      const data = (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: LOGIN,
-          variables,
-          fetchPolicy: 'no-cache',
-        })
-      ).data.login
-      if (data) {
-        commit('setUser', {
-          phone: data.phone,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          avatar: data.avatar,
-          gender: data.gender,
-          state: data.state,
-          city: data.city,
-          zip: data.zip,
-          phone: data.phone,
-          role: data.role,
-          provider: data.provider,
-          verified: data.verified,
-        })
-        return data
-      }
-    } catch (e) {
-      // commit('setErr', e, { root: true })
-      throw e
-    } finally {
-      commit('busy', false, { root: true })
-    }
-  },
-  async changePassword({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      const data = (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: CHANGE_PASSWORD,
-          variables,
-          fetchPolicy: 'no-cache',
-        })
-      ).data.changePassword
-    } catch (e) {
-      commit('setErr', e, { root: true })
-      throw e
-    } finally {
-      commit('busy', false, { root: true })
-    }
-  },
-  async resetPassword({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      return (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: RESET_PASSWORD,
-          variables,
-          fetchPolicy: 'no-cache',
-        })
-      ).data.resetPassword
-    } catch (e) {
-      throw e
-    } finally {
-      commit('busy', false, { root: true })
-    }
-  },
-  async emailPassword({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      const data = (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: EMAIL_PASSWORD,
-          variables,
-          fetchPolicy: 'no-cache',
-        })
-      ).data.emailPassword
-      return data
-    } catch (e) {
-      throw e
-    } finally {
-      commit('busy', false, { root: true })
-    }
-  },
-  async updateProfile({ commit, rootState }, variables) {
-    try {
-      commit('clearErr', null, { root: true })
-      const data = (
-        await this.app.apolloProvider.defaultClient.mutate({
-          mutation: UPDATE_PROFILE,
-          variables,
-        })
-      ).data.updateProfile
+    // console.log(data, 'registerrrrr')
+    if (data) {
       commit('setUser', {
         phone: data.phone,
         email: data.email,
@@ -225,17 +106,102 @@ export default {
         state: data.state,
         city: data.city,
         zip: data.zip,
-        phone: data.phone,
         role: data.role,
-        verified: data.verified,
         provider: data.provider,
-        info: data.info,
+        verified: data.verified,
       })
-      // commit('info', 'Profile updated.', { root: true }) // Also fired on location change
-      commit('busy', false, { root: true })
+      commit('info', 'Registered successfully.', { root: true })
       return data
-    } catch (err) {
-      throw err
     }
+
+    commit('busy', false, { root: true })
+  },
+  async login({ commit, rootState }, variables) {
+    commit('clearErr', null, { root: true })
+    const data = (
+      await this.app.apolloProvider.defaultClient.mutate({
+        mutation: LOGIN,
+        variables,
+        fetchPolicy: 'no-cache',
+      })
+    ).data.login
+    if (data) {
+      commit('setUser', {
+        phone: data.phone,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        gender: data.gender,
+        state: data.state,
+        city: data.city,
+        zip: data.zip,
+        role: data.role,
+        provider: data.provider,
+        verified: data.verified,
+      })
+      return data
+    }
+    commit('busy', false, { root: true })
+  },
+  async changePassword({ commit, rootState }, variables) {
+    try {
+      commit('clearErr', null, { root: true })
+      await this.app.apolloProvider.defaultClient.mutate({
+        mutation: CHANGE_PASSWORD,
+        variables,
+        fetchPolicy: 'no-cache',
+      })
+    } catch (e) {
+      commit('setErr', e, { root: true })
+      throw e
+    } finally {
+      commit('busy', false, { root: true })
+    }
+  },
+  async resetPassword({ commit, rootState }, variables) {
+    commit('clearErr', null, { root: true })
+    await this.app.apolloProvider.defaultClient.mutate({
+      mutation: RESET_PASSWORD,
+      variables,
+      fetchPolicy: 'no-cache',
+    })
+    commit('busy', false, { root: true })
+  },
+  async emailPassword({ commit, rootState }, variables) {
+    commit('clearErr', null, { root: true })
+    await this.app.apolloProvider.defaultClient.mutate({
+      mutation: EMAIL_PASSWORD,
+      variables,
+      fetchPolicy: 'no-cache',
+    })
+    commit('busy', false, { root: true })
+  },
+  async updateProfile({ commit, rootState }, variables) {
+    commit('clearErr', null, { root: true })
+    const data = (
+      await this.app.apolloProvider.defaultClient.mutate({
+        mutation: UPDATE_PROFILE,
+        variables,
+      })
+    ).data.updateProfile
+    commit('setUser', {
+      phone: data.phone,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      avatar: data.avatar,
+      gender: data.gender,
+      state: data.state,
+      city: data.city,
+      zip: data.zip,
+      role: data.role,
+      verified: data.verified,
+      provider: data.provider,
+      info: data.info,
+    })
+    // commit('info', 'Profile updated.', { root: true }) // Also fired on location change
+    commit('busy', false, { root: true })
+    return data
   },
 }

@@ -21,7 +21,10 @@
       </div>
       <ApolloQuery
         :query="require('~/gql/payment/paymentMethods.gql')"
-        :variables="{ active: true }"
+        :variables="{
+          active: true,
+          store: $store.state.store && $store.state.store.id,
+        }"
         :update="
           (data) => {
             paymentMethod = data.paymentMethods.data[0].value

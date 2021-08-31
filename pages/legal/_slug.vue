@@ -3,7 +3,10 @@
     <ApolloQuery
       class
       :query="require('~/gql/page/pageSlug.gql')"
-      :variables="{ slug: $route.params.slug }"
+      :variables="{
+        slug: $route.params.slug,
+        store: $store.state.store && $store.state.store.id,
+      }"
       :update="
         (data) => {
           setPage(data.pageSlug)

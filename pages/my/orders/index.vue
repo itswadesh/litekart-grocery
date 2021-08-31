@@ -3,7 +3,10 @@
     <HeadingFlat class="noprint">Manage Orders</HeadingFlat>
     <ApolloQuery
       :query="require('~/gql/order/orders.gql')"
-      :variables="{ id: $route.query.id }"
+      :variables="{
+        id: $route.query.id,
+        store: $store.state.store && $store.state.store.id,
+      }"
     >
       <template v-slot="{ result: { error, data }, isLoading }">
         <ListCardSkeleton v-if="isLoading">Loading........</ListCardSkeleton>

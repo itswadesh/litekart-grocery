@@ -30,7 +30,11 @@
       </div>
       <!-- Right sidebar -->
       <div class="p-2 mb-24 w-72">
-        <ApolloQuery :query="ADDRESSES" :update="selectFirstAddress">
+        <ApolloQuery
+          :query="ADDRESSES"
+          :update="selectFirstAddress"
+          :variables="{ store: $store.state.store && $store.state.store.id }"
+        >
           <template v-slot="{ result: { error, data }, query, isLoading }">
             <div v-if="isLoading">Loading........</div>
             <ErrComponent v-else-if="error" :error="error" />

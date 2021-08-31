@@ -2,7 +2,10 @@
   <div class="bg-white">
     <ApolloQuery
       :query="require('~/gql/product/productSlug.gql')"
-      :variables="{ slug: $route.params.slug }"
+      :variables="{
+        slug: $route.params.slug,
+        store: $store.state.store && $store.state.store.id,
+      }"
       :update="
         (data) => {
           initProduct(data.productSlug)

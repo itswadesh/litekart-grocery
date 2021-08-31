@@ -10,12 +10,16 @@ import CAPTURE_PAY from '~/gql/pay/capturePay.gql'
 import VALIDATE_CART from '~/gql/cart/validateCart.gql'
 
 export default {
-  async fetch({ commit, state, getters }, slug) {
+  async fetch({ commit, state, rootState, getters }, slug) {
     try {
       commit('clearErr', null, { root: true })
+      const variables = {
+        store: rootState.store && rootState.store.id,
+      }
       const data = (
         await this.app.apolloProvider.defaultClient.query({
           query: CART,
+          variables,
           fetchPolicy: 'no-cache',
         })
       ).data.cart
@@ -28,12 +32,16 @@ export default {
       commit('busy', false, { root: true })
     }
   },
-  async clear({ commit, state, getters }) {
+  async clear({ commit, state, rootState, getters }) {
     try {
       commit('clearErr', null, { root: true })
+      const variables = {
+        store: rootState.store && rootState.store.id,
+      }
       const data = (
         await this.app.apolloProvider.defaultClient.mutate({
           mutation: CLEAR_CART,
+          variables,
         })
       ).data.clearCart
       commit('setCart', {}) // can not pass null else clear cart request will be rejected
@@ -44,9 +52,10 @@ export default {
       commit('busy', false, { root: true })
     }
   },
-  async addToCart({ commit }, payload) {
+  async addToCart({ commit, state, rootState }, payload) {
     if (typeof payload.options !== 'string')
       payload.options = JSON.stringify(payload.options)
+    payload.store = rootState.store && rootState.store.id
     try {
       // commit('clearErr', null, { root: true })
       const data = (
@@ -63,10 +72,11 @@ export default {
       // commit('busy', false, { root: true })
     }
   },
-  async removeCoupon({ commit }, payload) {
+  async removeCoupon({ commit, rootState }, payload) {
     try {
       commit('clearErr', null, { root: true })
       commit('busy', true, { root: true })
+      payload.store = rootState.store && rootState.store.id
       const data = (
         await this.app.apolloProvider.defaultClient.mutate({
           mutation: REMOVE_COUPON,
@@ -80,9 +90,10 @@ export default {
       commit('busy', false, { root: true })
     }
   },
-  async applyCoupon({ commit }, payload) {
+  async applyCoupon({ commit, rootState }, payload) {
     try {
       commit('clearErr', null, { root: true })
+      payload.store = rootState.store && rootState.store.id
       const data = (
         await this.app.apolloProvider.defaultClient.mutate({
           mutation: APPLY_COUPON,
@@ -108,6 +119,7 @@ export default {
     { paymentMethod, address }
   ) {
     paymentMethod = paymentMethod || 'COD'
+    const store = rootState.store && rootState.store.id
     switch (paymentMethod) {
       case 'COD':
         try {
@@ -126,6 +138,7 @@ export default {
               variables: {
                 address,
                 paymentMethod,
+                store,
               },
             })
           ).data.checkout
@@ -152,12 +165,13 @@ export default {
         const vc = (
           await this.app.apolloProvider.defaultClient.query({
             query: VALIDATE_CART,
+            variables: { store },
           })
         ).data.validateCart
         const rp = (
           await this.app.apolloProvider.defaultClient.mutate({
             mutation: RAZORPAY,
-            variables: { address },
+            variables: { address, store },
           })
         ).data.razorpay
         const apollo = this.app.apolloProvider.defaultClient
@@ -177,6 +191,7 @@ export default {
                   variables: {
                     paymentId: response.razorpay_payment_id,
                     oid: response.razorpay_order_id,
+                    store,
                   },
                 })
               ).data.capturePay
@@ -215,7 +230,7 @@ export default {
           const cashFreePayload = (
             await this.app.apolloProvider.defaultClient.mutate({
               mutation: CASHFREE_PAY_NOW,
-              variables: { address },
+              variables: { address, store },
             })
           ).data.cashfreePayNow
           if (!cashFreePayload) {

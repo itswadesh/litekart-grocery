@@ -42,7 +42,10 @@
       <!-- <Categories /> -->
       <ApolloQuery
         :query="require('~/gql/product/products.gql')"
-        :variables="{ category: $route.params.slug }"
+        :variables="{
+          category: $route.params.slug,
+          store: $store.state.store && $store.state.store.id,
+        }"
       >
         <template v-slot="{ result: { error, data }, isLoading }">
           <div v-if="isLoading">Loading...</div>

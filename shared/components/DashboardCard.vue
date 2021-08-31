@@ -1,6 +1,7 @@
 <template>
   <ApolloQuery
     :query="query"
+    :variables="{ store: $store.state.store && $store.state.store.id }"
     class="flex items-center justify-center w-full p-2 bg-blue-100"
   >
     <template v-slot="{ result: { error, data }, isLoading }">

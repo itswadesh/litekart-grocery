@@ -1,5 +1,9 @@
 <template>
-  <ApolloQuery id="nav" :query="require('~/gql/category/categories.gql')">
+  <ApolloQuery
+    id="nav"
+    :query="require('~/gql/category/categories.gql')"
+    :variables="{ store: $store.state.store && $store.state.store.id }"
+  >
     <template v-slot="{ result: { error, data }, isLoading }">
       <div v-if="isLoading">Loading...</div>
       <ErrComponent v-else-if="error" />

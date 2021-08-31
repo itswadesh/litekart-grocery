@@ -31,6 +31,7 @@ export default {
     { src: '~/plugins/VueYoutube.js', ssr: false },
     // { src: '~/plugins/agora.js', ssr: false },
     { src: '~/plugins/dir', ssr: true },
+    { src: '~/plugins/api', ssr: true },
     // { src: '~/plugins/init', ssr: false },
     // { src: '~/plugins/directives.js', ssr:false },
   ],

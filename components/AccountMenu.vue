@@ -1,6 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-200 lg:w-1/5">
-    <ApolloQuery :query="require('~/gql/user/me.gql')">
+    <ApolloQuery
+      :query="require('~/gql/user/me.gql')"
+      :variables="{ store: $store.state.store && $store.state.store.id }"
+    >
       <template v-slot="{ result: { error, data }, isLoading }">
         <div v-if="isLoading" class="h-56 bg-white"></div>
         <ErrComponent v-else-if="error" :error="error" />

@@ -1,6 +1,7 @@
 <template>
   <ApolloQuery
     :query="require('~/gql/product/bestSellers.gql')"
+    :variables="{ store: $store.state.store && $store.state.store.id }"
     :update="(data) => data.bestSellers"
   >
     <template v-slot="{ result: { error, data }, isLoading }">

@@ -1,5 +1,5 @@
+import STORE_ONE from '~/gql/store/storeOne.gql'
 import SETTINGS from '~/gql/settings/settings.gql'
-import STORE from '~/gql/store/store.gql'
 import MEGAMENU from '~/gql/category/megamenu.gql'
 import SAVE_FCM_TOKEN from '~/gql/fcmToken/saveFcmToken.gql'
 export default {
@@ -25,21 +25,42 @@ export default {
       // console.log('FCM:::', e.toString())
     }
   },
-  async fetch({ commit, state, getters, $fire }) {
+  async fetchSettings({ commit, state, getters, $fire, params }, domain) {
     try {
       commit('clearErr')
       const settings = (
         await this.app.apolloProvider.defaultClient.query({ query: SETTINGS })
       ).data.settings
-      const stor = (
-        await this.app.apolloProvider.defaultClient.query({ query: STORE })
-      ).data.store
-      const megamenu = (
-        await this.app.apolloProvider.defaultClient.query({ query: MEGAMENU })
-      ).data.megamenu
-      commit('megamenu', megamenu)
       commit('settings', settings)
-      commit('store', stor)
+    } catch (e) {
+      commit('setErr', e)
+    } finally {
+      commit('busy', false)
+    }
+  },
+  async fetch({ commit, state, getters, $fire, params }, domain) {
+    try {
+      commit('clearErr')
+      const variables = { domain }
+      // if(domain.includes('.misiki.in'))
+      //  variables = { slug:'' }
+      console.log(variables)
+      const stor = (
+        await this.app.apolloProvider.defaultClient.query({
+          query: STORE_ONE,
+          variables,
+        })
+      ).data.storeOne
+      if (stor) {
+        const megamenu = (
+          await this.app.apolloProvider.defaultClient.query({
+            query: MEGAMENU,
+            variables: { store: stor.id },
+          })
+        ).data.megamenu
+        commit('megamenu', megamenu)
+        commit('store', stor)
+      }
       // const observer = this.app.apolloProvider.defaultClient.subscribe({
       //   query: SUBSCRIPTION_SETTINGS_UPDATED,
       // })
@@ -55,7 +76,7 @@ export default {
       //   },
       // })
     } catch (e) {
-      // console.error('An error occurred while retrieving token. ', e)
+      console.error('An error occurred while retrieving token. ', e)
 
       if (
         e.toString() !==
@@ -68,14 +89,23 @@ export default {
   },
   async nuxtClientInit({ state, commit, dispatch }, context) {
     // dispatch('fcm')
-    await dispatch('fetch')
-    await dispatch('auth/fetch')
-    await dispatch('cart/fetch')
-  },
-  async nuxtServerInit({ state, commit, dispatch }, context) {
-    // console.log('nuxtServerInit')
     // await dispatch('fetch')
     // await dispatch('auth/fetch')
     // await dispatch('cart/fetch')
+  },
+  async nuxtServerInit({ state, commit, dispatch }, { params, app, req }) {
+    const host = req.headers.host
+    // console.log('Host..............', host)
+    // .replace('https://', '')
+    // .replace('http://', '')
+    const domain = new URL('http://' + host)
+    // console.log(domain)
+    await dispatch('fetchSettings')
+    // if (!params.store) return
+    // app.router.base = params.store || '/'
+    // console.log('nuxtServerInit')
+    await dispatch('fetch', domain.hostname)
+    await dispatch('auth/fetch', domain.hostname)
+    await dispatch('cart/fetch', domain.hostname)
   },
 }
