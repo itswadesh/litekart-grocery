@@ -22,7 +22,7 @@
           v-for="(s, ix) in settings.orderStatuses"
           :key="ix"
           v-if="s.public"
-          class="py-2 flex border-b py-4"
+          class="flex border-b py-4"
           :class="{
             'text-green-500': index == ix,
             'opacity-25': s.status !== order.items[0].status,

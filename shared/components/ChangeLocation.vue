@@ -18,7 +18,10 @@
       <h3 class="my-4 text-xl text-gray-600">Please select location</h3>
       <ApolloQuery
         :query="require('~/gql/location/cities.gql')"
-        :variables="{ active: true }"
+        :variables="{
+          active: true,
+          store: $store.state.store && $store.state.store.id,
+        }"
       >
         <template v-slot="{ result: { error, data }, isLoading }">
           <LocationPillsSkeleton v-if="isLoading" />
