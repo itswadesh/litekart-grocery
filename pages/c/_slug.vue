@@ -74,7 +74,7 @@
         </template>
       </ApolloQuery>
     </div>
-    <StickyFoote class="mt-20" />
+    <StickyFooter class="mt-20" />
   </div>
 </template>
 

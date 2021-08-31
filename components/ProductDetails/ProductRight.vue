@@ -616,7 +616,7 @@ export default {
         this.reviewSummary = (
           await this.$apollo.query({
             query: REVIEWS,
-            variables: { product },
+            variables: { pid: product },
             fetchPolicy: 'no-cache',
           })
         ).data.reviewSummary

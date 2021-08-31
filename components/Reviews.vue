@@ -19,7 +19,7 @@
     <ApolloQuery
       :query="require('~/gql/review/productReviews.gql')"
       :variables="{
-        product: product.id,
+        pid: product.id,
         store: $store.state.store && $store.state.store.id,
       }"
     >
@@ -89,13 +89,13 @@ export default {
       this.reviewSummary = (
         await this.$apollo.query({
           query: REVIEW_SUMMARY,
-          variables: { product: this.product.id },
+          variables: { pid: this.product.id },
         })
       ).data.reviewSummary
       this.reviews = (
         await this.$apollo.query({
           query: PRODUCT_REVIEWS,
-          variables: { product: this.product.id },
+          variables: { pid: this.product.id },
         })
       ).data.productReviews
     } catch (e) {
